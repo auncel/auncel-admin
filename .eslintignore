@@ -1,0 +1,8 @@
+/lambda/
+/scripts
+/config
+.history
+
+*.e2e.js
+*.test.js
+*.test.ts
