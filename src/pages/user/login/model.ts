@@ -35,8 +35,9 @@ const Model: ModelType = {
         type: 'changeLoginStatus',
         payload: response,
       });
+      console.log(response);
       // Login successfully
-      if (response.status === 'ok') {
+      if (response.success) {
         message.success('登录成功！');
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
