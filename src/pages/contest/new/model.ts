@@ -10,7 +10,7 @@ export interface ModelType {
   };
 }
 const Model: ModelType = {
-  namespace: 'problem',
+  namespace: 'contest',
 
   state: {},
 

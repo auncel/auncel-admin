@@ -56,7 +56,7 @@ const BasicForm: FC<BasicFormProps> = (props) => {
   };
 
   return (
-    <PageHeaderWrapper content={<FormattedMessage id="new-problem.basic.description" />}>
+    <PageHeaderWrapper content={<FormattedMessage id="new-contest.basic.description" />}>
       <Card bordered={false}>
         <Form
           hideRequiredMark
@@ -70,67 +70,67 @@ const BasicForm: FC<BasicFormProps> = (props) => {
         >
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="new-problem.title.label" />}
+            label={<FormattedMessage id="new-contest.title.label" />}
             name="title"
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'new-problem.title.required' }),
+                message: formatMessage({ id: 'new-contest.title.required' }),
               },
             ]}
           >
-            <Input placeholder={formatMessage({ id: 'new-problem.title.placeholder' })} />
+            <Input placeholder={formatMessage({ id: 'new-contest.title.placeholder' })} />
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="new-problem.date.label" />}
+            label={<FormattedMessage id="new-contest.date.label" />}
             name="date"
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'new-problem.date.required' }),
+                message: formatMessage({ id: 'new-contest.date.required' }),
               },
             ]}
           >
             <RangePicker
               style={{ width: '100%' }}
               placeholder={[
-                formatMessage({ id: 'new-problem.placeholder.start' }),
-                formatMessage({ id: 'new-problem.placeholder.end' }),
+                formatMessage({ id: 'new-contest.placeholder.start' }),
+                formatMessage({ id: 'new-contest.placeholder.end' }),
               ]}
             />
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="new-problem.goal.label" />}
+            label={<FormattedMessage id="new-contest.goal.label" />}
             name="goal"
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'new-problem.goal.required' }),
+                message: formatMessage({ id: 'new-contest.goal.required' }),
               },
             ]}
           >
             <TextArea
               style={{ minHeight: 32 }}
-              placeholder={formatMessage({ id: 'new-problem.goal.placeholder' })}
+              placeholder={formatMessage({ id: 'new-contest.goal.placeholder' })}
               rows={4}
             />
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="new-problem.standard.label" />}
+            label={<FormattedMessage id="new-contest.standard.label" />}
             name="standard"
             rules={[
               {
                 required: true,
-                message: formatMessage({ id: 'new-problem.standard.required' }),
+                message: formatMessage({ id: 'new-contest.standard.required' }),
               },
             ]}
           >
             <TextArea
               style={{ minHeight: 32 }}
-              placeholder={formatMessage({ id: 'new-problem.standard.placeholder' })}
+              placeholder={formatMessage({ id: 'new-contest.standard.placeholder' })}
               rows={4}
             />
           </FormItem>
@@ -138,10 +138,10 @@ const BasicForm: FC<BasicFormProps> = (props) => {
             {...formItemLayout}
             label={
               <span>
-                <FormattedMessage id="new-problem.client.label" />
+                <FormattedMessage id="new-contest.client.label" />
                 <em className={styles.optional}>
-                  <FormattedMessage id="new-problem.form.optional" />
-                  <Tooltip title={<FormattedMessage id="new-problem.label.tooltip" />}>
+                  <FormattedMessage id="new-contest.form.optional" />
+                  <Tooltip title={<FormattedMessage id="new-contest.label.tooltip" />}>
                     <InfoCircleOutlined style={{ marginRight: 4 }} />
                   </Tooltip>
                 </em>
@@ -149,36 +149,36 @@ const BasicForm: FC<BasicFormProps> = (props) => {
             }
             name="client"
           >
-            <Input placeholder={formatMessage({ id: 'new-problem.client.placeholder' })} />
+            <Input placeholder={formatMessage({ id: 'new-contest.client.placeholder' })} />
           </FormItem>
           <FormItem
             {...formItemLayout}
             label={
               <span>
-                <FormattedMessage id="new-problem.invites.label" />
+                <FormattedMessage id="new-contest.invites.label" />
                 <em className={styles.optional}>
-                  <FormattedMessage id="new-problem.form.optional" />
+                  <FormattedMessage id="new-contest.form.optional" />
                 </em>
               </span>
             }
             name="invites"
           >
-            <Input placeholder={formatMessage({ id: 'new-problem.invites.placeholder' })} />
+            <Input placeholder={formatMessage({ id: 'new-contest.invites.placeholder' })} />
           </FormItem>
           <FormItem
             {...formItemLayout}
             label={
               <span>
-                <FormattedMessage id="new-problem.weight.label" />
+                <FormattedMessage id="new-contest.weight.label" />
                 <em className={styles.optional}>
-                  <FormattedMessage id="new-problem.form.optional" />
+                  <FormattedMessage id="new-contest.form.optional" />
                 </em>
               </span>
             }
             name="weight"
           >
             <InputNumber
-              placeholder={formatMessage({ id: 'new-problem.weight.placeholder' })}
+              placeholder={formatMessage({ id: 'new-contest.weight.placeholder' })}
               min={0}
               max={100}
             />
@@ -186,39 +186,39 @@ const BasicForm: FC<BasicFormProps> = (props) => {
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label={<FormattedMessage id="new-problem.public.label" />}
-            help={<FormattedMessage id="new-problem.label.help" />}
+            label={<FormattedMessage id="new-contest.public.label" />}
+            help={<FormattedMessage id="new-contest.label.help" />}
             name="publicType"
           >
             <div>
               <Radio.Group>
                 <Radio value="1">
-                  <FormattedMessage id="new-problem.radio.public" />
+                  <FormattedMessage id="new-contest.radio.public" />
                 </Radio>
                 <Radio value="2">
-                  <FormattedMessage id="new-problem.radio.partially-public" />
+                  <FormattedMessage id="new-contest.radio.partially-public" />
                 </Radio>
                 <Radio value="3">
-                  <FormattedMessage id="new-problem.radio.private" />
+                  <FormattedMessage id="new-contest.radio.private" />
                 </Radio>
               </Radio.Group>
               <FormItem style={{ marginBottom: 0 }} name="publicUsers">
                 <Select
                   mode="multiple"
-                  placeholder={formatMessage({ id: 'new-problem.publicUsers.placeholder' })}
+                  placeholder={formatMessage({ id: 'new-contest.publicUsers.placeholder' })}
                   style={{
                     margin: '8px 0',
                     display: showPublicUsers ? 'block' : 'none',
                   }}
                 >
                   <Option value="1">
-                    <FormattedMessage id="new-problem.option.A" />
+                    <FormattedMessage id="new-contest.option.A" />
                   </Option>
                   <Option value="2">
-                    <FormattedMessage id="new-problem.option.B" />
+                    <FormattedMessage id="new-contest.option.B" />
                   </Option>
                   <Option value="3">
-                    <FormattedMessage id="new-problem.option.C" />
+                    <FormattedMessage id="new-contest.option.C" />
                   </Option>
                 </Select>
               </FormItem>
@@ -226,10 +226,10 @@ const BasicForm: FC<BasicFormProps> = (props) => {
           </FormItem>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button type="primary" htmlType="submit" loading={submitting}>
-              <FormattedMessage id="new-problem.form.submit" />
+              <FormattedMessage id="new-contest.form.submit" />
             </Button>
             <Button style={{ marginLeft: 8 }}>
-              <FormattedMessage id="new-problem.form.save" />
+              <FormattedMessage id="new-contest.form.save" />
             </Button>
           </FormItem>
         </Form>
