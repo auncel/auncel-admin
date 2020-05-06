@@ -58,18 +58,18 @@ const handleAdd = async (fields: Partial<ProblemDto>) => {
  * @param fields
  */
 const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('正在配置');
+  const hide = message.loading('正在更新');
   try {
     await updateRule({
       ...fields,
     });
     hide();
 
-    message.success('配置成功');
+    message.success('更新成功');
     return true;
   } catch (error) {
     hide();
-    message.error('配置失败请重试！');
+    message.error('更新失败请重试！');
     return false;
   }
 };
@@ -168,23 +168,27 @@ const TableList: React.FC<{}> = () => {
       valueType: 'option',
       render: (_, record) => (
         <>
-          <a
+          <Button
+            type="link"
             onClick={() => {
               handleUpdateModalVisible(true);
               setStepFormValues(record);
             }}
+            disabled={(window as any)?.currentUser?.id !== record?.maker?.id}
           >
             编辑 <EditOutlined />
-          </a>
+          </Button>
           <Divider type="vertical" />
-          <a
+          <Button
+            type="link"
             onClick={async () => {
               await handleRemove(record);
               actionRef.current!.reload();
             }}
+            disabled={(window as any)?.currentUser?.id !== record?.maker?.id}
           >
             删除 <DeleteOutlined />
-          </a>
+          </Button>
         </>
       ),
     },
