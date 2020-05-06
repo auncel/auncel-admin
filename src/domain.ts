@@ -1,14 +1,3 @@
-/* --------------------------------------------------------------------------*
- * Description:                                                              *
- *                                                                           *
- * File Created: Wednesday, 6th May 2020 11:27 am                            *
- * Author: yidafu(dov-yih) (me@yidafu.dev)                                   *
- *                                                                           *
- * Last Modified: Wednesday, 6th May 2020 11:27 am                           *
- * Modified By: yidafu(dov-yih) (me@yidafu.dev>)                             *
- *                                                                           *
- * Copyright 2019 - 2020 Mozilla Public License 2.0                          *
- *-------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------*
  * Description: Generated using typescript-generator from auncel-web-domain  *
  *                                                                           *
@@ -33,14 +22,14 @@
 
 /* eslint-disable */
 
-// Generated using typescript-generator version 2.9.456 on 2020-04-28 19:44:38.
+// Generated using typescript-generator version 2.9.456 on 2020-05-06 20:48:04.
 
 export interface User extends BaseEntity {
   username: string;
   realname: string;
   avatar: string;
   slogan: string;
-  role: number;
+  role: UserRoleType;
   status: string;
   registerIp: string;
   school: string;
@@ -121,6 +110,7 @@ export interface Submission extends BaseEntity {
   renderTree: string;
   logs: string;
   screenshot: string;
+  exeTime: number;
   submiter: User;
 }
 
@@ -134,7 +124,7 @@ export interface UserDto extends Serializable {
   realname: string;
   avatar: string;
   status: string;
-  role: number;
+  role: UserRoleType;
   registerIp: string;
   slogan: string;
   school: string;
@@ -149,6 +139,7 @@ export interface SubmissionDto extends Serializable {
   logs: string;
   screenshot: string;
   renderTree: string;
+  exeTime: number;
   problem: ProblemDto;
   submiter: UserDto;
   createdAt: Date;
@@ -200,6 +191,7 @@ export interface ProblemDto extends Serializable {
   acceptance: number;
   submission: number;
   access: ProblemAccessType;
+  maker: UserDto;
   tags: TagDto[];
   createdAt: Date;
   updatedAt: Date;
@@ -237,6 +229,12 @@ export interface TagDto {
   value: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export enum UserRoleType {
+  ORDINARY = 'ORDINARY',
+  ADMIN = 'ADMIN',
+  SUPER_USER = 'SUPER_USER',
 }
 
 export enum UserContestStatus {
