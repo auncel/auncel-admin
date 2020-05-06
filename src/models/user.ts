@@ -1,6 +1,7 @@
 import { Effect, Reducer } from 'umi';
 
 import { queryCurrent, query as queryUsers } from '@/services/user';
+import { UserDto } from '@/domain';
 
 export interface CurrentUser {
   avatar?: string;
@@ -17,7 +18,7 @@ export interface CurrentUser {
 }
 
 export interface UserModelState {
-  currentUser?: CurrentUser;
+  currentUser?: Partial<UserDto>;
 }
 
 export interface UserModelType {
@@ -50,9 +51,10 @@ const UserModel: UserModelType = {
     },
     *fetchCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
+      (window as any).currentUser = response.data;
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        payload: response.data,
       });
     },
   },

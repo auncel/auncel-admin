@@ -12,9 +12,12 @@ export async function fakeAccountLogin(params: LoginParamsType) {
   return request('http://api.auncel.top/user/login', {
     method: 'POST',
     data: params,
+    credentials: 'include',
   });
 }
 
 export async function getFakeCaptcha(mobile: string) {
-  return request(`http://api.auncel.top/user/login/captcha?mobile=${mobile}`);
+  return request(`http://api.auncel.top/user/login/captcha?mobile=${mobile}`, {
+    credentials: 'include',
+  });
 }
