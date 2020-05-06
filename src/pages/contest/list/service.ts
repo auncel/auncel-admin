@@ -2,18 +2,19 @@ import request from 'umi-request';
 import { TableListParams } from './data.d';
 
 export async function queryRule(params?: TableListParams) {
-  return request('/api/rule', {
+  return request.get('http://api.auncel.top/contest/getByMaker', {
     params,
+    credentials: 'include',
   });
 }
 
 export async function removeRule(params: { key: number[] }) {
   return request('/api/rule', {
-    method: 'POST',
+    method: 'DELETE',
     data: {
       ...params,
-      method: 'delete',
     },
+    credentials: 'include',
   });
 }
 
@@ -22,17 +23,17 @@ export async function addRule(params: TableListParams) {
     method: 'POST',
     data: {
       ...params,
-      method: 'post',
     },
+    credentials: 'include',
   });
 }
 
 export async function updateRule(params: TableListParams) {
   return request('/api/rule', {
-    method: 'POST',
+    method: 'PUT',
     data: {
       ...params,
-      method: 'update',
     },
+    credentials: 'include',
   });
 }
