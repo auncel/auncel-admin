@@ -102,40 +102,42 @@ export default defineConfig({
             {
               path: '/problem',
               name: 'Problem',
-              icon: 'bars',
-              routes: [
-                {
-                  name: 'Create Problem',
-                  icon: 'plus',
-                  path: '/problem/new',
-                  component: './problem/new',
-                },
-                {
-                  name: 'Problem List',
-                  icon: 'table',
-                  path: '/problem/list',
-                  component: './problem/list',
-                },
-              ],
+              icon: 'table',
+              component: './problem/list',
+              // routes: [
+              //   {
+              //     name: 'Create Problem',
+              //     icon: 'plus',
+              //     path: '/problem/new',
+              //     component: './problem/new',
+              //   },
+              //   {
+              //     name: 'Problem List',
+              //     icon: 'table',
+              //     path: '/problem/list',
+              //     component: './problem/list',
+              //   },
+              // ],
             },
             {
               path: '/contest',
               name: 'Contest',
               icon: 'bars',
-              routes: [
-                {
-                  name: 'Create Contest',
-                  icon: 'plus',
-                  path: '/contest/new',
-                  component: './contest/new',
-                },
-                {
-                  name: 'Contest List',
-                  icon: 'table',
-                  path: '/contest/list',
-                  component: './contest/list',
-                },
-              ],
+              component: './contest/list',
+              // routes: [
+              //   {
+              //     name: 'Create Contest',
+              //     icon: 'plus',
+              //     path: '/contest/new',
+              //     component: './contest/new',
+              //   },
+              //   {
+              //     name: 'Contest List',
+              //     icon: 'table',
+              //     path: '/contest/list',
+              //     component: './contest/list',
+              //   },
+              // ],
             },
             // {
             //   path: '/form',
@@ -360,6 +362,7 @@ export default defineConfig({
   manifest: {
     basePath: '/',
   },
+  sass: {},
   proxy: proxy[REACT_APP_ENV || 'dev'],
   chainWebpack: webpackPlugin,
 });
