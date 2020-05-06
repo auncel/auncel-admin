@@ -6,7 +6,7 @@ import { TableListItem, TableListParams } from './data.d';
 // mock tableListDataSource
 let tableListDataSource: TableListItem[] = [];
 
-for (let i = 0; i < 10; i += 1) {
+for (let i = 0; i < 30; i += 1) {
   tableListDataSource.push({
     key: i,
     disabled: i % 6 === 0,

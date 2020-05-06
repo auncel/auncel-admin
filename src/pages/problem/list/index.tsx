@@ -1,23 +1,48 @@
-import { DownOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Dropdown, Menu, message } from 'antd';
+import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, message, Tag, Divider } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
+import { ProblemDto, UserDto, ProblemAccessType, ProblemDifficulty, TagDto } from '@/domain';
 import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
-import { TableListItem } from './data.d';
 import { queryRule, updateRule, addRule, removeRule } from './service';
+import { DifficultyTag } from './components/DifficultyTag';
+
+const tagColors = [
+  'magenta',
+  'red',
+  'volcano',
+  'orange',
+  'gold',
+  'lime',
+  'green',
+  'cyan',
+  'blue',
+  'geekblue',
+  'purple',
+];
+function getColor(text: string): string {
+  const hexString = text
+    .split('')
+    .map((c) => c.charCodeAt(0).toString(16))
+    .join('');
+  let sum = 0;
+  // eslint-disable-next-line no-restricted-syntax
+  for (const hex of hexString) {
+    sum += parseInt(hex, 16);
+  }
+  return tagColors[sum % tagColors.length];
+}
 
 /**
  * 添加节点
  * @param fields
  */
-const handleAdd = async (fields: FormValueType) => {
+const handleAdd = async (fields: Partial<ProblemDto>) => {
   const hide = message.loading('正在添加');
   try {
-    await addRule({
-      desc: fields.desc,
-    });
+    await addRule({ ...fields });
     hide();
     message.success('添加成功');
     return true;
@@ -36,9 +61,7 @@ const handleUpdate = async (fields: FormValueType) => {
   const hide = message.loading('正在配置');
   try {
     await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
+      ...fields,
     });
     hide();
 
@@ -53,14 +76,14 @@ const handleUpdate = async (fields: FormValueType) => {
 
 /**
  *  删除节点
- * @param selectedRows
+ * @param problem
  */
-const handleRemove = async (selectedRows: TableListItem[]) => {
+const handleRemove = async (problem: ProblemDto) => {
   const hide = message.loading('正在删除');
-  if (!selectedRows) return true;
+  if (!problem) return true;
   try {
     await removeRule({
-      key: selectedRows.map((row) => row.key),
+      id: problem.id,
     });
     hide();
     message.success('删除成功，即将刷新');
@@ -77,33 +100,64 @@ const TableList: React.FC<{}> = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const columns: ProColumns<TableListItem>[] = [
+
+  const columns: ProColumns<ProblemDto>[] = [
     {
-      title: '规则名称',
-      dataIndex: 'name',
+      title: 'ID',
+      dataIndex: 'id',
+    },
+    {
+      title: '名称',
+      dataIndex: 'title',
     },
     {
       title: '描述',
-      dataIndex: 'desc',
+      dataIndex: 'description',
     },
     {
-      title: '服务调用次数',
-      dataIndex: 'callNo',
-      sorter: true,
-      renderText: (val: string) => `${val} 万`,
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      valueEnum: {
-        0: { text: '关闭', status: 'Default' },
-        1: { text: '运行中', status: 'Processing' },
-        2: { text: '已上线', status: 'Success' },
-        3: { text: '异常', status: 'Error' },
+      title: '标签',
+      dataIndex: 'tags',
+      render(tags: TagDto[]) {
+        return (
+          tags &&
+          tags.map((tag: TagDto) => (
+            <Tag key={tag.value + tag.id} color={getColor(tag.value)}>
+              {tag.value}
+            </Tag>
+          ))
+        );
       },
     },
     {
-      title: '上次调度时间',
+      title: '权限',
+      dataIndex: 'access',
+      valueType: 'text',
+      render: (access: ProblemAccessType) => {
+        return access.toString();
+      },
+    },
+    {
+      title: '难度',
+      dataIndex: 'difficulty',
+      render: (difficulty: ProblemDifficulty) => {
+        return <DifficultyTag type={difficulty} />;
+      },
+    },
+    {
+      title: '创建者',
+      dataIndex: 'maker',
+      render: (maker: UserDto) => {
+        return maker.username;
+      },
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createdAt',
+      sorter: true,
+      valueType: 'dateTime',
+    },
+    {
+      title: '更新时间',
       dataIndex: 'updatedAt',
       sorter: true,
       valueType: 'dateTime',
@@ -120,10 +174,17 @@ const TableList: React.FC<{}> = () => {
               setStepFormValues(record);
             }}
           >
-            配置
+            编辑 <EditOutlined />
           </a>
           <Divider type="vertical" />
-          <a href="">订阅警报</a>
+          <a
+            onClick={async () => {
+              await handleRemove(record);
+              actionRef.current!.reload();
+            }}
+          >
+            删除 <DeleteOutlined />
+          </a>
         </>
       ),
     },
@@ -131,48 +192,41 @@ const TableList: React.FC<{}> = () => {
 
   return (
     <PageHeaderWrapper>
-      <ProTable<TableListItem>
-        headerTitle="查询表格"
+      <ProTable<ProblemDto>
+        headerTitle="问题列表"
         actionRef={actionRef}
         rowKey="key"
+        search={false}
         toolBarRender={(action, { selectedRows }) => [
           <Button icon={<PlusOutlined />} type="primary" onClick={() => handleModalVisible(true)}>
             新建
           </Button>,
           selectedRows && selectedRows.length > 0 && (
-            <Dropdown
-              overlay={
-                <Menu
-                  onClick={async (e) => {
-                    if (e.key === 'remove') {
-                      await handleRemove(selectedRows);
-                      action.reload();
-                    }
-                  }}
-                  selectedKeys={[]}
-                >
-                  <Menu.Item key="remove">批量删除</Menu.Item>
-                  <Menu.Item key="approval">批量审批</Menu.Item>
-                </Menu>
-              }
+            <Button
+              onClick={async () => {
+                //  await handleRemove(selectedRows);  action.reload();
+              }}
             >
-              <Button>
-                批量操作 <DownOutlined />
-              </Button>
-            </Dropdown>
+              删除 <DeleteOutlined />
+            </Button>
           ),
         ]}
-        tableAlertRender={({ selectedRowKeys, selectedRows }) => (
+        tableAlertRender={({ selectedRowKeys }) => (
           <div>
-            已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a> 项&nbsp;&nbsp;
+            已选择{' '}
+            <a style={{ fontWeight: 600 }}>
+              {selectedRowKeys.length} {selectedRowKeys.join('|')}
+            </a>{' '}
+            项
+            {/* &nbsp;&nbsp;
             <span>
               服务调用次数总计 {selectedRows.reduce((pre, item) => pre + item.callNo, 0)} 万
-            </span>
+            </span> */}
           </div>
         )}
         request={(params) => queryRule(params)}
         columns={columns}
-        rowSelection={{}}
+        rowSelection={false}
       />
       <CreateForm
         onSubmit={async (value) => {
