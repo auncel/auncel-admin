@@ -22,7 +22,7 @@
 
 /* eslint-disable */
 
-// Generated using typescript-generator version 2.9.456 on 2020-05-06 20:48:04.
+// Generated using typescript-generator version 2.9.456 on 2020-05-07 21:34:25.
 
 export interface User extends BaseEntity {
   username: string;
@@ -174,6 +174,7 @@ export interface ContestDto extends Serializable {
   access: ContestAccessType;
   invitaionCode: string;
   maker: UserDto;
+  problems: ProblemDto[];
   createdAt: Date;
   updatedAt: Date;
 }
