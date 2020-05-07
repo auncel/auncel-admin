@@ -31,9 +31,10 @@ const Model: ModelType = {
   effects: {
     *fetchCurrent(_, { call, put }) {
       const response = yield call(queryCurrent);
+      (window as any).currentUser = response.data;
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        payload: response.data,
       });
     },
     *fetch({ payload }, { call, put }) {

@@ -1,19 +1,17 @@
 import React, { FC, useEffect } from 'react';
 import moment from 'moment';
-import { Modal, Result, Button, Form, DatePicker, Input, Select } from 'antd';
-import { BasicListItemDataType } from '../data';
+import { Modal, Form, Input, Select } from 'antd';
+import { UserRoleType, UserDto } from '@/domain';
 import styles from '../style.less';
 
 interface OperationModalProps {
-  done: boolean;
   visible: boolean;
-  current: Partial<BasicListItemDataType> | undefined;
+  current: Partial<UserDto> | undefined;
   onDone: () => void;
-  onSubmit: (values: BasicListItemDataType) => void;
+  onSubmit: (values: UserDto) => void;
   onCancel: () => void;
 }
 
-const { TextArea } = Input;
 const formLayout = {
   labelCol: { span: 7 },
   wrapperCol: { span: 13 },
@@ -21,7 +19,7 @@ const formLayout = {
 
 const OperationModal: FC<OperationModalProps> = (props) => {
   const [form] = Form.useForm();
-  const { done, visible, current, onDone, onCancel, onSubmit } = props;
+  const { visible, current, onCancel, onSubmit } = props;
 
   useEffect(() => {
     if (form && !visible) {
@@ -45,67 +43,40 @@ const OperationModal: FC<OperationModalProps> = (props) => {
 
   const handleFinish = (values: { [key: string]: any }) => {
     if (onSubmit) {
-      onSubmit(values as BasicListItemDataType);
+      onSubmit(values as UserDto);
     }
   };
 
-  const modalFooter = done
-    ? { footer: null, onCancel: onDone }
-    : { okText: '保存', onOk: handleSubmit, onCancel };
+  const modalFooter = { okText: '保存', onOk: handleSubmit, onCancel };
 
   const getModalContent = () => {
-    if (done) {
-      return (
-        <Result
-          status="success"
-          title="操作成功"
-          subTitle="一系列的信息描述，很短同样也可以带标点。"
-          extra={
-            <Button type="primary" onClick={onDone}>
-              知道了
-            </Button>
-          }
-          className={styles.formResult}
-        />
-      );
-    }
     return (
       <Form {...formLayout} form={form} onFinish={handleFinish}>
-        <Form.Item
-          name="title"
-          label="任务名称"
-          rules={[{ required: true, message: '请输入任务名称' }]}
-        >
+        <Form.Item name="username" label="昵称" rules={[{ required: true, message: '请输入昵称' }]}>
           <Input placeholder="请输入" />
         </Form.Item>
-        <Form.Item
-          name="createdAt"
-          label="开始时间"
-          rules={[{ required: true, message: '请选择开始时间' }]}
-        >
-          <DatePicker
-            showTime
-            placeholder="请选择"
-            format="YYYY-MM-DD HH:mm:ss"
-            style={{ width: '100%' }}
-          />
+
+        <Form.Item name="realname" label="姓名">
+          <Input placeholder="请输入" />
         </Form.Item>
-        <Form.Item
-          name="owner"
-          label="任务负责人"
-          rules={[{ required: true, message: '请选择任务负责人' }]}
-        >
+
+        <Form.Item name="role" label="角色" rules={[{ required: true, message: '请选择角色' }]}>
           <Select placeholder="请选择">
-            <Select.Option value="付晓晓">付晓晓</Select.Option>
-            <Select.Option value="周毛毛">周毛毛</Select.Option>
+            <Select.Option value={UserRoleType.ORDINARY}>普通用户</Select.Option>
+            <Select.Option value={UserRoleType.ADMIN}>管理员</Select.Option>
+            <Select.Option value={UserRoleType.SUPER_USER}>超级管理员</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item
-          name="subDescription"
-          label="产品描述"
-          rules={[{ message: '请输入至少五个字符的产品描述！', min: 5 }]}
-        >
-          <TextArea rows={4} placeholder="请输入至少五个字符" />
+        <Form.Item name="school" label="学校">
+          <Input placeholder="请输入" />
+        </Form.Item>
+
+        <Form.Item name="email" label="邮箱" rules={[{ required: true, message: '请输入邮箱' }]}>
+          <Input placeholder="请输入" type="email" />
+        </Form.Item>
+
+        <Form.Item name="password" label="密码" rules={[{ required: true, message: '请输入密码' }]}>
+          <Input placeholder="请输入" type="password" />
         </Form.Item>
       </Form>
     );
@@ -113,10 +84,10 @@ const OperationModal: FC<OperationModalProps> = (props) => {
 
   return (
     <Modal
-      title={done ? null : `任务${current ? '编辑' : '添加'}`}
+      title={`用户${current ? '编辑' : '添加'}`}
       className={styles.standardListForm}
       width={640}
-      bodyStyle={done ? { padding: '72px 0' } : { padding: '28px 0 0' }}
+      bodyStyle={{ padding: '28px 0 0' }}
       destroyOnClose
       visible={visible}
       {...modalFooter}

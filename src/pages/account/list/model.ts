@@ -1,10 +1,9 @@
 import { Effect, Reducer } from 'umi';
+import { UserDto } from '@/domain';
 import { addFakeList, queryFakeList, removeFakeList, updateFakeList } from './service';
 
-import { BasicListItemDataType } from './data';
-
 export interface StateType {
-  list: BasicListItemDataType[];
+  list: UserDto[];
 }
 
 export interface ModelType {
@@ -33,7 +32,7 @@ const Model: ModelType = {
       const response = yield call(queryFakeList, payload);
       yield put({
         type: 'queryList',
-        payload: Array.isArray(response) ? response : [],
+        payload: Array.isArray(response.data) ? response.data : [],
       });
     },
     *appendFetch({ payload }, { call, put }) {
@@ -53,7 +52,7 @@ const Model: ModelType = {
       const response = yield call(callback, payload); // post
       yield put({
         type: 'queryList',
-        payload: response,
+        payload: response.data,
       });
     },
   },

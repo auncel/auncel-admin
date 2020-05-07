@@ -1,4 +1,5 @@
 import request from 'umi-request';
+import { message } from 'antd';
 import { BasicListItemDataType } from './data';
 
 interface ParamsType extends Partial<BasicListItemDataType> {
@@ -6,9 +7,14 @@ interface ParamsType extends Partial<BasicListItemDataType> {
 }
 
 export async function queryFakeList(params: ParamsType) {
-  return request('/api/fake_list', {
+  const resp = await request('http://api.auncel.top/user/list', {
     params,
+    credentials: 'include',
   });
+  if (!resp.success) {
+    message.error(resp.msg);
+  }
+  return resp;
 }
 
 export async function removeFakeList(params: ParamsType) {
@@ -20,8 +26,8 @@ export async function removeFakeList(params: ParamsType) {
     },
     data: {
       ...restParams,
-      method: 'delete',
     },
+    credentials: 'include',
   });
 }
 
@@ -34,21 +40,21 @@ export async function addFakeList(params: ParamsType) {
     },
     data: {
       ...restParams,
-      method: 'post',
     },
+    credentials: 'include',
   });
 }
 
 export async function updateFakeList(params: ParamsType) {
   const { count = 5, ...restParams } = params;
-  return request('/api/fake_list', {
+  return request('http://api.auncel.top/user/list', {
     method: 'POST',
     params: {
       count,
     },
     data: {
       ...restParams,
-      method: 'update',
     },
+    credentials: 'include',
   });
 }
