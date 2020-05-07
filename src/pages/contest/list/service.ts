@@ -1,15 +1,22 @@
 import request from 'umi-request';
 import { TableListParams } from './data.d';
 
-export async function queryRule(params?: TableListParams) {
+export async function queryProblem(params?: TableListParams) {
+  return request.get('http://api.auncel.top/problem', {
+    params,
+    credentials: 'include',
+  });
+}
+
+export async function queryContest(params?: TableListParams) {
   return request.get('http://api.auncel.top/contest/getByMaker', {
     params,
     credentials: 'include',
   });
 }
 
-export async function removeRule(params: { key: number[] }) {
-  return request('/api/rule', {
+export async function removeContest(params: { key: number[] }) {
+  return request('http://api.auncel.top/contest', {
     method: 'DELETE',
     data: {
       ...params,
@@ -18,8 +25,8 @@ export async function removeRule(params: { key: number[] }) {
   });
 }
 
-export async function addRule(params: TableListParams) {
-  return request('/api/rule', {
+export async function addContest(params: TableListParams) {
+  return request('http://api.auncel.top/contest', {
     method: 'POST',
     data: {
       ...params,
@@ -28,8 +35,8 @@ export async function addRule(params: TableListParams) {
   });
 }
 
-export async function updateRule(params: TableListParams) {
-  return request('/api/rule', {
+export async function updateContest(params: TableListParams) {
+  return request('http://api.auncel.top/contest', {
     method: 'PUT',
     data: {
       ...params,

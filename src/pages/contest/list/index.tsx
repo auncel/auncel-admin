@@ -3,11 +3,12 @@ import { Button, Divider, message } from 'antd';
 import React, { useState, useRef } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
-import { ContestStatus, UserDto, ContestAccessType } from '@/domain';
+import copy from 'copy-to-clipboard';
+import { ContestStatus, UserDto, ContestAccessType, ContestDto } from '@/domain';
 import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
 import { TableListItem } from './data.d';
-import { queryRule, updateRule, addRule } from './service';
+import { queryContest, updateContest, addContest } from './service';
 
 /**
  * 添加节点
@@ -16,9 +17,7 @@ import { queryRule, updateRule, addRule } from './service';
 const handleAdd = async (fields: FormValueType) => {
   const hide = message.loading('正在添加');
   try {
-    await addRule({
-      desc: fields.desc,
-    });
+    await addContest({ ...fields });
     hide();
     message.success('添加成功');
     return true;
@@ -36,11 +35,7 @@ const handleAdd = async (fields: FormValueType) => {
 const handleUpdate = async (fields: FormValueType) => {
   const hide = message.loading('正在配置');
   try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
+    await updateContest({ ...fields });
     hide();
 
     message.success('配置成功');
@@ -57,7 +52,7 @@ const TableList: React.FC<{}> = () => {
   const [updateModalVisible, handleUpdateModalVisible] = useState<boolean>(false);
   const [stepFormValues, setStepFormValues] = useState({});
   const actionRef = useRef<ActionType>();
-  const columns: ProColumns<TableListItem>[] = [
+  const columns: ProColumns<ContestDto>[] = [
     {
       title: '名称',
       dataIndex: 'title',
@@ -114,7 +109,12 @@ const TableList: React.FC<{}> = () => {
             更新 <EditOutlined />
           </a>
           <Divider type="vertical" />
-          <a>
+          <a
+            onClick={() => {
+              copy(`http://api.auncel.top/contest/join?code=${record.invitaionCode}`);
+              message.success('拷贝链接到剪切板');
+            }}
+          >
             邀请链接 <LinkOutlined />
           </a>
         </>
@@ -134,7 +134,7 @@ const TableList: React.FC<{}> = () => {
             新建
           </Button>,
         ]}
-        request={(params) => queryRule(params)}
+        request={(params) => queryContest(params)}
         columns={columns}
         rowSelection={false}
       />
