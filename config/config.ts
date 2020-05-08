@@ -74,19 +74,19 @@ export default defineConfig({
           Routes: ['src/pages/Authorized'],
           authority: ['admin', 'user'],
           routes: [
-            {
-              path: '/dashboard',
-              name: 'dashboard',
-              icon: 'dashboard',
-              routes: [
-                {
-                  name: 'analysis',
-                  icon: 'smile',
-                  path: '/dashboard/analysis',
-                  component: './dashboard/analysis',
-                },
-              ],
-            },
+            // {
+            //   path: '/dashboard',
+            //   name: 'dashboard',
+            //   icon: 'dashboard',
+            //   routes: [
+            //     {
+            //       name: 'analysis',
+            //       icon: 'smile',
+            //       path: '/dashboard/analysis',
+            //       component: './dashboard/analysis',
+            //     },
+            //   ],
+            // },
             {
               path: '/problem',
               name: 'Problem',
@@ -151,8 +151,8 @@ export default defineConfig({
             },
             {
               path: '/',
-              redirect: '/dashboard/analysis',
-              authority: ['admin', 'user'],
+              redirect: '/problem',
+              // authority: ['admin', 'user'],
             },
             {
               component: '404',
