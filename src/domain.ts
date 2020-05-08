@@ -22,7 +22,7 @@
 
 /* eslint-disable */
 
-// Generated using typescript-generator version 2.9.456 on 2020-05-07 21:34:25.
+// Generated using typescript-generator version 2.9.456 on 2020-05-07 22:24:02.
 
 export interface User extends BaseEntity {
   username: string;
@@ -127,7 +127,8 @@ export interface UserDto extends Serializable {
   role: UserRoleType;
   registerIp: string;
   slogan: string;
-  school: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface SubmissionDto extends Serializable {
