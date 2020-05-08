@@ -6,8 +6,10 @@ import { findDOMNode } from 'react-dom';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect, Dispatch } from 'umi';
 import moment from 'moment';
-import { UserDto } from '@/domain';
+import { UserDto, UserRoleType } from '@/domain';
+import Exception403 from '@/pages/exception/403';
 import OperationModal from './components/OperationModal';
+import UpdateModal from './components/UpdateModal';
 import { StateType } from './model';
 import styles from './style.less';
 
@@ -42,7 +44,7 @@ const ListContent = ({ data: { realname, createdAt, role, registerIp } }: { data
   </div>
 );
 
-export const BasicList: FC<BasicListProps> = (props) => {
+export const AccountList: FC<BasicListProps> = (props) => {
   const addBtn = useRef(null);
   const {
     loading,
@@ -50,6 +52,7 @@ export const BasicList: FC<BasicListProps> = (props) => {
     AcountList: { list },
   } = props;
   const [visible, setVisible] = useState<boolean>(false);
+  const [updateVisible, setUpdateVisible] = useState<boolean>(false);
   const [current, setCurrent] = useState<Partial<UserDto> | undefined>(undefined);
 
   useEffect(() => {
@@ -67,7 +70,7 @@ export const BasicList: FC<BasicListProps> = (props) => {
   };
 
   const showEditModal = (item: UserDto) => {
-    setVisible(true);
+    setUpdateVisible(true);
     setCurrent(item);
   };
 
@@ -82,6 +85,7 @@ export const BasicList: FC<BasicListProps> = (props) => {
   const handleCancel = () => {
     setAddBtnblur();
     setVisible(false);
+    setUpdateVisible(false);
   };
 
   const handleSubmit = (values: UserDto) => {
@@ -94,7 +98,12 @@ export const BasicList: FC<BasicListProps> = (props) => {
       payload: { id, ...values },
     });
     setVisible(false);
+    setUpdateVisible(false);
   };
+
+  if ((window as any).currentUser.role !== UserRoleType.SUPER_USER) {
+    return <Exception403 />;
+  }
 
   return (
     <div>
@@ -155,6 +164,12 @@ export const BasicList: FC<BasicListProps> = (props) => {
         onCancel={handleCancel}
         onSubmit={handleSubmit}
       />
+      <UpdateModal
+        current={current}
+        visible={updateVisible}
+        onCancel={handleCancel}
+        onSubmit={handleSubmit}
+      />
     </div>
   );
 };
@@ -172,4 +187,4 @@ export default connect(
     AcountList,
     loading: loading.models.AcountList,
   }),
-)(BasicList);
+)(AccountList);

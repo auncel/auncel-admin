@@ -6,24 +6,27 @@ interface ParamsType extends Partial<BasicListItemDataType> {
   count?: number;
 }
 
-export async function queryFakeList(params: ParamsType) {
-  const resp = await request('http://api.auncel.top/user/list', {
-    params,
-    credentials: 'include',
-  });
-  if (!resp.success) {
-    message.error(resp.msg);
+export async function queryFakeList() {
+  let resp;
+  try {
+    resp = await request('http://api.auncel.top/user/list', {
+      credentials: 'include',
+    });
+
+    if (!resp.success) {
+      message.error(resp.msg);
+    }
+    return resp;
+  } catch (err) {
+    message.error(err.toString());
+    return resp;
   }
-  return resp;
 }
 
 export async function removeFakeList(params: ParamsType) {
-  const { count = 5, ...restParams } = params;
+  const { ...restParams } = params;
   return request('/api/fake_list', {
     method: 'POST',
-    params: {
-      count,
-    },
     data: {
       ...restParams,
     },
@@ -32,29 +35,43 @@ export async function removeFakeList(params: ParamsType) {
 }
 
 export async function addFakeList(params: ParamsType) {
-  const { count = 5, ...restParams } = params;
-  return request('/api/fake_list', {
-    method: 'POST',
-    params: {
-      count,
-    },
-    data: {
-      ...restParams,
-    },
-    credentials: 'include',
-  });
+  let resp;
+  try {
+    resp = await request('http://api.auncel.top/user/admin', {
+      method: 'POST',
+      data: {
+        ...params,
+      },
+      credentials: 'include',
+    });
+
+    if (!resp.success) {
+      message.error(resp.msg);
+    }
+    return resp;
+  } catch (err) {
+    message.error(err.toString());
+    return resp;
+  }
 }
 
 export async function updateFakeList(params: ParamsType) {
-  const { count = 5, ...restParams } = params;
-  return request('http://api.auncel.top/user/list', {
-    method: 'POST',
-    params: {
-      count,
-    },
-    data: {
-      ...restParams,
-    },
-    credentials: 'include',
-  });
+  let resp;
+  try {
+    resp = await request('http://api.auncel.top/user/u/profile', {
+      method: 'PUT',
+      data: {
+        ...params,
+      },
+      credentials: 'include',
+    });
+
+    if (!resp.success) {
+      message.error(resp.msg);
+    }
+    return resp;
+  } catch (err) {
+    message.error(err.toString());
+    return resp;
+  }
 }
