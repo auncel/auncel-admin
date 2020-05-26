@@ -46,7 +46,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       <>
         <Button onClick={() => handleUpdateModalVisible(false, values)}>取消</Button>
         <Button type="primary" onClick={() => handleSave()}>
-          保持
+          保存
         </Button>
       </>
     );
@@ -87,7 +87,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           name="description"
           rules={[{ required: true, message: '请输入描述！' }]}
         >
-          <Input placeholder="请输入" />
+          <Input.TextArea placeholder="请输入" />
         </FormItem>
 
         <FormItem

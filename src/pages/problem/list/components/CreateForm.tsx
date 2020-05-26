@@ -44,7 +44,7 @@ const CreateForm: React.FC<CreateFormProps> = (props) => {
           name="description"
           rules={[{ required: true, message: '请输入描述！', min: 5 }]}
         >
-          <Input placeholder="请输入" />
+          <Input.TextArea placeholder="请输入" />
         </FormItem>
 
         <FormItem

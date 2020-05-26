@@ -6,8 +6,9 @@ import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 import { ProblemDto, UserDto, ProblemAccessType, ProblemDifficulty, TagDto } from '@/domain';
 import CreateForm from './components/CreateForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
-import { queryRule, updateRule, addRule, removeRule } from './service';
+import { queryProblem, updateProblem, addProblem, removeProblem } from './service';
 import { DifficultyTag } from './components/DifficultyTag';
+import { StatisticsButton } from './components/StatisticsButton';
 
 const tagColors = [
   'magenta',
@@ -42,7 +43,7 @@ function getColor(text: string): string {
 const handleAdd = async (fields: Partial<ProblemDto>) => {
   const hide = message.loading('正在添加');
   try {
-    await addRule({ ...fields });
+    await addProblem({ ...fields });
     hide();
     message.success('添加成功');
     return true;
@@ -60,7 +61,7 @@ const handleAdd = async (fields: Partial<ProblemDto>) => {
 const handleUpdate = async (fields: FormValueType) => {
   const hide = message.loading('正在更新');
   try {
-    await updateRule({
+    await updateProblem({
       ...fields,
     });
     hide();
@@ -82,7 +83,7 @@ const handleRemove = async (problem: ProblemDto) => {
   const hide = message.loading('正在删除');
   if (!problem) return true;
   try {
-    await removeRule({
+    await removeProblem({
       id: problem.id,
     });
     hide();
@@ -189,6 +190,8 @@ const TableList: React.FC<{}> = () => {
           >
             删除 <DeleteOutlined />
           </Button>
+          <Divider type="vertical" />
+          <StatisticsButton problemId={record?.id} makerId={record?.maker?.id} />
         </>
       ),
     },
@@ -201,19 +204,19 @@ const TableList: React.FC<{}> = () => {
         actionRef={actionRef}
         rowKey="key"
         search={false}
-        toolBarRender={(action, { selectedRows }) => [
+        toolBarRender={() => [
           <Button icon={<PlusOutlined />} type="primary" onClick={() => handleModalVisible(true)}>
             新建
           </Button>,
-          selectedRows && selectedRows.length > 0 && (
-            <Button
-              onClick={async () => {
-                //  await handleRemove(selectedRows);  action.reload();
-              }}
-            >
-              删除 <DeleteOutlined />
-            </Button>
-          ),
+          // selectedRows && selectedRows.length > 0 && (
+          //   <Button
+          //     onClick={async () => {
+          //       await handleRemove(selectedRows as any); action.reload();
+          //     }}
+          //   >
+          //     删除 <DeleteOutlined />
+          //   </Button>
+          // ),
         ]}
         tableAlertRender={({ selectedRowKeys }) => (
           <div>
@@ -228,7 +231,7 @@ const TableList: React.FC<{}> = () => {
             </span> */}
           </div>
         )}
-        request={(params) => queryRule(params)}
+        request={(params) => queryProblem(params)}
         columns={columns}
         rowSelection={false}
       />

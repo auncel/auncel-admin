@@ -1,0 +1,21 @@
+.accept {
+  padding: 2px 5px;
+  color: #fff;
+  background-color: #43cf7c;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 150%;
+  text-align: center;
+}
+
+.wrongAnwser {
+  padding: 2px 5px;
+  color: #fff;
+  background-color: #d43030;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 150%;
+  text-align: center;
+}
